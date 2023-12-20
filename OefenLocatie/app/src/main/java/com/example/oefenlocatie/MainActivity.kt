@@ -1,46 +1,56 @@
 package com.example.oefenlocatie
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.oefenlocatie.ui.theme.OefenLocatieTheme
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.*
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            OefenLocatieTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+        setContentView(R.layout.activity_main)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult?.lastLocation?.let { location ->
+                    Log.d("coordinaten", "${location.longitude} ${location.latitude}")
                 }
             }
         }
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("coordinaten", "Er is geen toestemming verleend voor het uitlezen coordinaten")
+        } else {
+            val locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10000) // Update every 10 seconds
+
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                null
+            )
+        }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    OefenLocatieTheme {
-        Greeting("Android")
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 }
