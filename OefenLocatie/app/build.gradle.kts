@@ -52,7 +52,6 @@ android {
 }
 
 dependencies {
-    implementation("com.mapbox.maps:android:10.16.2")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
@@ -74,4 +73,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+//    Mapbox dependencies
+    implementation("com.mapbox.maps:android:11.0.0")
+    implementation("com.mapbox.maps:mapbox-android-sdk:6.0.1")
+    implementation("com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.5.0")
 }

@@ -10,5 +10,5 @@
 
     -->
 
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">YOUR_KEY_HERE</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">pk.eyJ1IjoiZGFubnkyMDA0IiwiYSI6ImNscjI4NGJ3bzExMjEycHQzNGdvaTEweHUifQ.wQmJNn-5C_CChkO9ObfnYw</string>
 </resources>
