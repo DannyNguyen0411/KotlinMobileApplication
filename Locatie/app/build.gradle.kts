@@ -37,6 +37,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -52,5 +53,7 @@ dependencies {
 
 //    Mapbox implementation
     implementation("com.mapbox.maps:android:11.0.0")
+//    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:10.0.0")
+//    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:latest_version")
 
 }
