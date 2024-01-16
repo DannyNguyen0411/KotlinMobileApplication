@@ -39,16 +39,6 @@ class MapsActivity : AppCompatActivity() {
         mapView.onStart()
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        mapView.onResume()
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        mapView.onPause()
-//    }
-
     override fun onStop() {
         super.onStop()
         mapView.onStop()
