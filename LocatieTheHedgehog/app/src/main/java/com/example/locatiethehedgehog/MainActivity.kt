@@ -1,35 +1,90 @@
 package com.example.locatiethehedgehog
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import com.mapbox.geojson.Point
-import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 
-/**
- * Example of displaying a map.
- */
 class MainActivity : AppCompatActivity() {
+    private var mapView: MapView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mapView = MapView(this)
-        setContentView(mapView)
-        mapView.mapboxMap
-            .apply {
-                setCamera(
-                    CameraOptions.Builder()
-                        .center(Point.fromLngLat(LONGITUDE, LATITUDE))
-                        .pitch(0.0)
-                        .zoom(9.0)
-                        .bearing(0.0)
-                        .build()
-                )
+        setContentView(R.layout.activity_main)
+
+        // Initialize the correct mapView instance
+        mapView = findViewById(R.id.mapView)
+
+        mapView?.getMapboxMap()?.loadStyleUri(
+            Style.MAPBOX_STREETS,
+            object : Style.OnStyleLoaded {
+                override fun onStyleLoaded(style: Style) {
+                    addAnnotationToMap(style)
+                }
             }
+        )
     }
 
-    companion object {
-        private const val LATITUDE = 51.85
-        private const val LONGITUDE = 4.33
+    private fun addAnnotationToMap(style: Style) {
+        // Ensure that mapView and style are not null
+        if (mapView == null || style == null) {
+            return
+        }
+
+        // Create an instance of the Annotation API and get the PointAnnotationManager.
+        bitmapFromDrawableRes(
+            this@MainActivity,
+            R.drawable.red_marker
+        )?.let {
+            val annotationApi = mapView?.annotations
+            val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
+            // Ensure that pointAnnotationManager is not null
+            if (pointAnnotationManager != null) {
+                // Set options for the resulting symbol layer.
+                val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                    // Define a geographic coordinate.
+                    .withPoint(Point.fromLngLat(18.06, 59.31))
+                    // Specify the bitmap you assigned to the point annotation
+                    // The bitmap will be added to map style automatically.
+                    .withIconImage(it)
+                // Add the resulting pointAnnotation to the map.
+                pointAnnotationManager.create(pointAnnotationOptions)
+            }
+        }
+    }
+
+    private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =
+        convertDrawableToBitmap(AppCompatResources.getDrawable(context, resourceId))
+
+    private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
+        if (sourceDrawable == null) {
+            return null
+        }
+        return if (sourceDrawable is BitmapDrawable) {
+            sourceDrawable.bitmap
+        } else {
+            // copying drawable object to not manipulate on the same reference
+            val constantState = sourceDrawable.constantState ?: return null
+            val drawable = constantState.newDrawable().mutate()
+            val bitmap: Bitmap = Bitmap.createBitmap(
+                drawable.intrinsicWidth, drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+            bitmap
+        }
     }
 }

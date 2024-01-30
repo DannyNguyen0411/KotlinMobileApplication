@@ -4,20 +4,21 @@
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/cat_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16sp"
-        android:layout_marginEnd="339sp"
-        android:layout_marginBottom="659sp"
-        android:src="@drawable/add_cat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <com.mapbox.maps.MapView
+        android:id="@+id/mapMarker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:mapbox_cameraTargetLat="59.31"
+        mapbox:mapbox_cameraTargetLng="18.06"
+        mapbox:mapbox_cameraZoom="9.0"
+        />
 
     <Button
         android:id="@+id/options"
@@ -42,6 +43,6 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp">
         </com.mapbox.maps.MapView>
-    
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
