@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    You can also add your created values
+
+
+    -->
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">pk.eyJ1IjoiZGFubnkyMDA0IiwiYSI6ImNscjI4NGJ3bzExMjEycHQzNGdvaTEweHUifQ.wQmJNn-5C_CChkO9ObfnYw</string>
+</resources>
